@@ -3,14 +3,17 @@
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 WebApplication app = builder.Build();
 
-app.MapGet("/", () => "Hello World!222222222222222222222 World!Hello World!");
+app.Run(HandleRequst);
+app.Run();
+async Task HandleRequst(HttpContext context)
+{
+    await context.Response.WriteAsync("Hello METANIT.COM 2");
+}
 
-//app.Run();
-
-
+/*
 await app.StartAsync();
 await Task.Delay(3000);
 await app.StopAsync();
-
+*/
 
 
