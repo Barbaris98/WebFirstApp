@@ -6,14 +6,19 @@ WebApplication app = builder.Build();
 app.Run(async (context) =>
 {
     context.Response.ContentType = "text/html; charset=utf-8";
-    var stringBuilder = new System.Text.StringBuilder("<table>");
 
-    foreach (var header in context.Request.Headers)
+    // если обращение идет по адресу "/postuser", получаем данные формы
+    if (context.Request.Path == "/postuser")
     {
-        stringBuilder.Append($"<tr><td>{header.Key}</td><td>{header.Value}</td></tr>");
+        var form = context.Request.Form;
+        string name = form["name"];
+        string age = form["age"];
+        await context.Response.WriteAsync($"<div><p>Name: {name}</p><p>Age: {age}</p></div>");
     }
-    stringBuilder.Append("</table>");
-    await context.Response.WriteAsync(stringBuilder.ToString());
+    else
+    {
+        await context.Response.SendFileAsync("html/index.html");
+    }
 });
 
 app.Run();
