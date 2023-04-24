@@ -3,17 +3,20 @@
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 WebApplication app = builder.Build();
 
-app.Run(HandleRequst);
-app.Run();
-async Task HandleRequst(HttpContext context)
+app.Run(async (context) =>
 {
-    await context.Response.WriteAsync("Hello METANIT.COM 2");
-}
+    context.Response.ContentType = "text/html; charset=utf-8";
+    var stringBuilder = new System.Text.StringBuilder("<table>");
 
-/*
-await app.StartAsync();
-await Task.Delay(3000);
-await app.StopAsync();
-*/
+    foreach (var header in context.Request.Headers)
+    {
+        stringBuilder.Append($"<tr><td>{header.Key}</td><td>{header.Value}</td></tr>");
+    }
+    stringBuilder.Append("</table>");
+    await context.Response.WriteAsync(stringBuilder.ToString());
+});
+
+app.Run();
+
 
 
